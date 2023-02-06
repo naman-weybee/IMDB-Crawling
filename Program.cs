@@ -95,9 +95,9 @@ namespace IMDB_Crawling
                         };
                         await _context.tbl_Top_250_Movies.AddAsync(top250Movies);
                     }
-                    await _context.SaveChangesAsync();
-                    Console.WriteLine("Data Saved Successfully...!");
                 }
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Data Saved Successfully...!");
             }
             catch (Exception ex)
             {
