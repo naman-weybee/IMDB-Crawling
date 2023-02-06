@@ -90,7 +90,7 @@ namespace IMDB_Crawling
                     var movieLink = BaseUrl + movie.SelectNodes(XpathStrings.MovieLinkXpath).First().GetAttributes("href").First().Value ?? string.Empty;
                     var movieIMDB = movie.SelectNodes(XpathStrings.MovieIMDBXpath).First().InnerHtml.Trim() ?? string.Empty;
                     var movieId = RegexString.movieIdRegex.Match(movieLink).Groups[1].Value;
-                    var movieRank = AllMovies.IndexOf(movie) + 1;
+                    var movieRank = movie.SelectNodes(XpathStrings.MovieRankInIMDBXpath)?.First().GetAttributes("data-value")?.First().Value ?? string.Empty;
 
                     Console.WriteLine($"----------Movie with Id = {movieId}----------");
                     Console.WriteLine($"Movie Rank in IMDB: {movieRank}");

@@ -93,8 +93,9 @@ namespace IMDB_Crawling.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MovieRankInIMDB")
-                        .HasColumnType("int");
+                    b.Property<string>("MovieRankInIMDB")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()

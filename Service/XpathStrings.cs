@@ -10,6 +10,7 @@ namespace Phillips_Crawling_Task.Service
     {
         public static readonly string Top250MoviesXpath = "//span[.='Top 250 Movies']";
         public static readonly string MovieListXpath = "//tbody[@class='lister-list']/tr";
+        public static readonly string MovieRankInIMDBXpath = ".//td/span[@name='rk']";
         public static readonly string SingleMovieLinkXpath = ".//td/a";
         public static readonly string MovieLinkXpath = ".//td[@class='posterColumn']/a";
         public static readonly string MovieTitleXpath = ".//td[@class='titleColumn']/a";

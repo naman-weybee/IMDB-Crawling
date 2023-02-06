@@ -11,7 +11,7 @@ namespace IMDB_Crawling.Data
     {
         [Key]
         public string Id { get; set; }
-        public int MovieRankInIMDB { get; set; }
+        public string MovieRankInIMDB { get; set; }
         public string Title { get; set; }
         public string Link { get; set; }
         public string IMDB { get; set; }

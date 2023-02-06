@@ -13,7 +13,7 @@ namespace IMDB_Crawling.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MovieRankInIMDB = table.Column<int>(type: "int", nullable: false),
+                    MovieRankInIMDB = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IMDB = table.Column<string>(type: "nvarchar(max)", nullable: false)
