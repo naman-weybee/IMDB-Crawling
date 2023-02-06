@@ -53,10 +53,10 @@ namespace IMDB_Crawling
             driver.FindElement(By.XPath(XpathStrings.Top250MoviesXpath)).Click();
             GetFullyLoadedWebPageContent(driver);
 
-            IList<IWebElement> movieList = driver.FindElements(By.XPath(XpathStrings.MovieLinkXpath));
+            IList<IWebElement> movieList = driver.FindElements(By.XPath(XpathStrings.MovieListXpath));
             try
             {
-                foreach (var movie in movieList)
+                foreach (IWebElement movie in movieList)
                 {
                     var movieTitle = movie.FindElement(By.XPath(XpathStrings.MovieTitleXpath)).Text;
                     var movieLink = movie.FindElement(By.XPath(XpathStrings.MovieLinkXpath)).GetAttribute("href");
