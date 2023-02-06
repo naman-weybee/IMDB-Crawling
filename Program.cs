@@ -28,11 +28,11 @@ namespace IMDB_Crawling
                 if (newScrollHeight != scrollHeight)
                 {
                     scrollHeight = newScrollHeight;
-                    Thread.Sleep(1500);
+                    Thread.Sleep(3000);
                 }
                 else
                 {
-                    Thread.Sleep(2500);
+                    Thread.Sleep(4000);
                     break;
                 }
             } while (true);
@@ -48,11 +48,11 @@ namespace IMDB_Crawling
                 if (newScrollHeight != scrollHeight)
                 {
                     scrollHeight = newScrollHeight;
-                    Thread.Sleep(1500);
+                    Thread.Sleep(3000);
                 }
                 else
                 {
-                    Thread.Sleep(2500);
+                    Thread.Sleep(4000);
                     break;
                 }
             } while (true);
