@@ -53,7 +53,7 @@ namespace IMDB_Crawling
             driver.FindElement(By.XPath(XpathStrings.Top250MoviesXpath)).Click();
             GetFullyLoadedWebPageContent(driver);
 
-            IList<IWebElement> movieList = driver.FindElements(By.XPath(XpathStrings.MovieListXpath));
+            IList<IWebElement> movieList = driver.FindElements(By.XPath(XpathStrings.MovieLinkXpath));
             try
             {
                 foreach (var movie in movieList)
@@ -64,7 +64,6 @@ namespace IMDB_Crawling
                     var movieId = RegexString.movieIdRegex.Match(movieLink).Groups[1].Value;
                     var movieRank = movieList.IndexOf(movie) + 1;
 
-                    Console.WriteLine("======================================================================================================");
                     Console.WriteLine($"Movie Rank in IMDB: {movieRank}");
                     Console.WriteLine($"Movie Id: {movieId}");
                     Console.WriteLine($"Movie Title: {movieTitle}");
@@ -72,16 +71,15 @@ namespace IMDB_Crawling
                     Console.WriteLine($"Movie Link: {movieLink}");
                     Console.WriteLine();
 
-                    var movieRecord = await _context.tbl_Top_250_Movies.Where(x => x.Id == movieId).FirstOrDefaultAsync();
-
-                    if (movieRecord != null)
+                    var topMovieRecord = await _context.tbl_Top_250_Movies.Where(x => x.Id == movieId).FirstOrDefaultAsync();
+                    if (topMovieRecord != null)
                     {
-                        movieRecord.Id = movieId;
-                        movieRecord.MovieRankInIMDB = movieRank;
-                        movieRecord.Title = movieTitle;
-                        movieRecord.Link = movieLink;
-                        movieRecord.IMDB = movieIMDB;
-                        _context.tbl_Top_250_Movies.Update(movieRecord);
+                        topMovieRecord.Id = movieId;
+                        topMovieRecord.MovieRankInIMDB = movieRank;
+                        topMovieRecord.Title = movieTitle;
+                        topMovieRecord.Link = movieLink;
+                        topMovieRecord.IMDB = movieIMDB;
+                        _context.tbl_Top_250_Movies.Update(topMovieRecord);
                     }
                     else
                     {
@@ -95,8 +93,93 @@ namespace IMDB_Crawling
                         };
                         await _context.tbl_Top_250_Movies.AddAsync(top250Movies);
                     }
+
+                    driver.Navigate().GoToUrl(movieLink);
+                    GetFullyLoadedWebPageContent(driver);
+
+                    var movieReleaseYear = driver.FindElement(By.XPath(XpathStrings.MovieReleaseYearXpath)).Text ?? string.Empty;
+                    var movieTimeDuration = driver.FindElement(By.XPath(XpathStrings.MovieTimeDurationXpath)).Text ?? string.Empty;
+                    var movieIMDBVoterCount = driver.FindElement(By.XPath(XpathStrings.MovieIMDBVoterCountXpath)).Text ?? string.Empty;
+                    var movieDescription = driver.FindElement(By.XPath(XpathStrings.MovieDescriptionXpath)).Text ?? string.Empty;
+                    var moviePosterImageUrl = driver.FindElement(By.XPath(XpathStrings.MoviePosterImageUrlXpath)).GetAttribute("href") ?? string.Empty;
+                    var movieWatchOnPrimeLink = driver.FindElement(By.XPath(XpathStrings.MovieWatchOnPrimeLink)).GetAttribute("href") ?? string.Empty;
+                    var movieGenres = driver.FindElements(By.XPath(XpathStrings.MovieGenresXpath)).ToList();
+                    var movieWriters = driver.FindElements(By.XPath(XpathStrings.MovieWritersXpath)).ToList();
+                    var movieStars = driver.FindElements(By.XPath(XpathStrings.MovieStarsXpath)).ToList();
+                    var movieDirectors = driver.FindElements(By.XPath(XpathStrings.MovieDirectorXpath)).ToList();
+                    var movieGenresString = string.Empty;
+                    var movieWritersString = string.Empty;
+                    var movieStarsString = string.Empty;
+                    var movieDirectorsString = string.Empty;
+
+                    foreach (var director in movieDirectors)
+                        if (movieGenres.IndexOf(director) < movieGenres.Count)
+                            movieDirectorsString = director.Text + ",";
+
+                    foreach (var genres in movieGenres)
+                        if (movieGenres.IndexOf(genres) < movieGenres.Count)
+                            movieGenresString = genres.Text + ",";
+
+                    foreach (var writer in movieWriters)
+                        if (movieWriters.IndexOf(writer) < movieWriters.Count)
+                            movieWritersString = writer.Text + ",";
+
+                    foreach (var star in movieStars)
+                        if (movieWriters.IndexOf(star) < movieWriters.Count)
+                            movieStarsString = star.Text + ",";
+
+                    Console.WriteLine($"Movie Id: {movieId}");
+                    Console.WriteLine($"Release Year: {movieReleaseYear}");
+                    Console.WriteLine($"Time Duration: {movieTimeDuration}");
+                    Console.WriteLine($"Poster Image Url: {moviePosterImageUrl}");
+                    Console.WriteLine($"Genres: {movieGenresString}");
+                    Console.WriteLine($"Description: {movieDescription}");
+                    Console.WriteLine($"Director: {movieDirectorsString}");
+                    Console.WriteLine($"Writer: {movieWritersString}");
+                    Console.WriteLine($"Stars: {movieStarsString}");
+                    Console.WriteLine($"Watch On Prime Link: {movieWatchOnPrimeLink}");
+
+                    var movieRecord = await _context.tbl_Movie_Details.Where(x => x.MovieId == movieId).FirstOrDefaultAsync();
+                    if (movieRecord != null)
+                    {
+                        movieRecord.Id = movieRecord.Id;
+                        movieRecord.MovieId = movieId;
+                        movieRecord.ReleaseYear = movieReleaseYear;
+                        movieRecord.TimeDuration = movieTimeDuration;
+                        movieRecord.PosterImageUrl = moviePosterImageUrl;
+                        movieRecord.Genres = movieGenresString;
+                        movieRecord.Description = movieDescription;
+                        movieRecord.Director = movieDirectorsString;
+                        movieRecord.Writer = movieWritersString;
+                        movieRecord.Stars = movieStarsString;
+                        movieRecord.WatchOnPrimeLink = movieWatchOnPrimeLink;
+                        _context.tbl_Movie_Details.Update(movieRecord);
+                    }
+                    else
+                    {
+                        MovieDetails movieDetails = new()
+                        {
+                            MovieId = movieId,
+                            ReleaseYear = movieReleaseYear,
+                            TimeDuration = movieTimeDuration,
+                            IMDBVoterCount = movieIMDBVoterCount,
+                            PosterImageUrl = moviePosterImageUrl,
+                            Genres = movieGenresString,
+                            Description = movieDescription,
+                            Director = movieDirectorsString,
+                            Writer = movieWritersString,
+                            Stars = movieStarsString,
+                            WatchOnPrimeLink = movieWatchOnPrimeLink
+                        };
+                        await _context.tbl_Movie_Details.AddAsync(movieDetails);
+                    }
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine();
+                    Console.WriteLine("=====================================================================================================================");
+                    Console.WriteLine($"Data Saved in Top250Movies and MovieDetails Tables with Movie Id: {movieId}");
+                    Console.WriteLine("=====================================================================================================================");
+                    Console.WriteLine();
                 }
-                await _context.SaveChangesAsync();
                 Console.WriteLine("Data Saved Successfully...!");
             }
             catch (Exception ex)
