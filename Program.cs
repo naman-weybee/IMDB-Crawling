@@ -28,11 +28,11 @@ namespace IMDB_Crawling
                 if (newScrollHeight != scrollHeight)
                 {
                     scrollHeight = newScrollHeight;
-                    Thread.Sleep(1500);
+                    Thread.Sleep(2500);
                 }
                 else
                 {
-                    Thread.Sleep(2500);
+                    Thread.Sleep(3500);
                     break;
                 }
             } while (true);
@@ -48,11 +48,11 @@ namespace IMDB_Crawling
                 if (newScrollHeight != scrollHeight)
                 {
                     scrollHeight = newScrollHeight;
-                    Thread.Sleep(1500);
+                    Thread.Sleep(2500);
                 }
                 else
                 {
-                    Thread.Sleep(2500);
+                    Thread.Sleep(3500);
                     break;
                 }
             } while (true);
@@ -123,44 +123,56 @@ namespace IMDB_Crawling
                     driver.Navigate().GoToUrl(movieUrl);
                     GetFullyLoadedWebPageContent(driver);
 
-                    var movieReleaseYear = driver.FindElement(By.XPath(XpathStrings.MovieReleaseYearXpath)).Text ?? string.Empty;
-                    var movieTimeDuration = driver.FindElement(By.XPath(XpathStrings.MovieTimeDurationXpath)).Text ?? string.Empty;
-                    var movieIMDBVoterCount = driver.FindElement(By.XPath(XpathStrings.MovieIMDBVoterCountXpath)).Text ?? string.Empty;
-                    var movieDescription = driver.FindElement(By.XPath(XpathStrings.MovieDescriptionXpath)).Text ?? string.Empty;
-                    var moviePosterImageUrl = driver.FindElement(By.XPath(XpathStrings.MoviePosterImageUrlXpath)).GetAttribute("src") ?? string.Empty;
-                    var movieWatchOnPrimeLink = driver.FindElement(By.XPath(XpathStrings.MovieWatchOnPrimeLink)).GetAttribute("href") ?? string.Empty;
-                    var movieGenres = driver.FindElements(By.XPath(XpathStrings.MovieGenresXpath)).ToList();
-                    var movieWriters = driver.FindElements(By.XPath(XpathStrings.MovieWritersXpath)).ToList();
-                    var movieStars = driver.FindElements(By.XPath(XpathStrings.MovieStarsXpath)).ToList();
-                    var movieDirectors = driver.FindElements(By.XPath(XpathStrings.MovieDirectorXpath)).ToList();
+                    var movieReleaseYear = string.Empty;
                     var movieGenresString = string.Empty;
                     var movieWritersString = string.Empty;
                     var movieStarsString = string.Empty;
                     var movieDirectorsString = string.Empty;
+                    var movieTimeDuration = string.Empty;
+                    var movieIMDBVoterCount = string.Empty;
+                    var movieDescription = string.Empty;
+                    var moviePosterImageUrl = string.Empty;
+                    var movieWatchOnPrimeLink = string.Empty;
 
-                    foreach (var director in movieDirectors)
-                        if (movieGenres.IndexOf(director) != movieGenres.Count)
-                            movieDirectorsString += director.Text + ",";
-                        else
-                            movieDirectorsString += director.Text;
+                    movieReleaseYear = driver.FindElement(By.XPath(XpathStrings.MovieReleaseYearXpath))?.Text ?? string.Empty;
+                    movieTimeDuration = driver.FindElement(By.XPath(XpathStrings.MovieTimeDurationXpath))?.Text ?? string.Empty;
+                    movieIMDBVoterCount = driver.FindElement(By.XPath(XpathStrings.MovieIMDBVoterCountXpath))?.Text ?? string.Empty;
+                    movieDescription = driver.FindElement(By.XPath(XpathStrings.MovieDescriptionXpath))?.Text ?? string.Empty;
+                    moviePosterImageUrl = driver.FindElement(By.XPath(XpathStrings.MoviePosterImageUrlXpath))?.GetAttribute("src") ?? string.Empty;
+                    movieWatchOnPrimeLink = driver.FindElement(By.XPath(XpathStrings.MovieWatchOnPrimeLink))?.GetAttribute("href") ?? string.Empty;
+                    var movieGenres = driver.FindElements(By.XPath(XpathStrings.MovieGenresXpath))?.ToList();
+                    var movieWriters = driver.FindElements(By.XPath(XpathStrings.MovieWritersXpath))?.ToList();
+                    var movieStars = driver.FindElements(By.XPath(XpathStrings.MovieStarsXpath))?.ToList();
+                    var movieDirectors = driver.FindElements(By.XPath(XpathStrings.MovieDirectorXpath))?.ToList();
 
-                    foreach (var genres in movieGenres)
-                        if (movieGenres.IndexOf(genres) != movieGenres.Count)
-                            movieGenresString += genres.Text + ",";
-                        else
-                            movieGenresString += genres.Text;
 
-                    foreach (var writer in movieWriters)
-                        if (movieWriters.IndexOf(writer) != movieWriters.Count)
-                            movieWritersString += writer.Text + ",";
-                        else
-                            movieWritersString += writer.Text;
+                    if (movieDirectors != null)
+                        foreach (var director in movieDirectors)
+                            if (movieDirectors!.IndexOf(director) != movieDirectors.Count - 1)
+                                movieDirectorsString += director.Text + ", ";
+                            else
+                                movieDirectorsString += director.Text;
 
-                    foreach (var star in movieStars)
-                        if (movieWriters.IndexOf(star) != movieWriters.Count)
-                            movieStarsString += star.Text + ",";
-                        else
-                            movieStarsString += star.Text;
+                    if (movieGenres != null)
+                        foreach (var genres in movieGenres)
+                            if (movieGenres.IndexOf(genres) != movieGenres.Count - 1)
+                                movieGenresString += genres.Text + ", ";
+                            else
+                                movieGenresString += genres.Text;
+
+                    if (movieWriters != null)
+                        foreach (var writer in movieWriters)
+                            if (movieWriters.IndexOf(writer) != movieWriters.Count - 1)
+                                movieWritersString += writer.Text + ", ";
+                            else
+                                movieWritersString += writer.Text;
+
+                    if (movieStars != null)
+                        foreach (var star in movieStars)
+                            if (movieStars.IndexOf(star) != movieStars.Count - 1)
+                                movieStarsString += star.Text + ", ";
+                            else
+                                movieStarsString += star.Text;
 
                     Console.WriteLine($"Movie Id: {movieId}");
                     Console.WriteLine($"Release Year: {movieReleaseYear}");
