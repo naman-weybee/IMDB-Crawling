@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Phillips_Crawling_Task.Service;
+using System;
 using System.IO;
 
 namespace IMDB_Crawling
@@ -134,17 +135,28 @@ namespace IMDB_Crawling
                     var moviePosterImageUrl = string.Empty;
                     var movieWatchOnPrimeLink = string.Empty;
 
-                    movieReleaseYear = driver.FindElement(By.XPath(XpathStrings.MovieReleaseYearXpath))?.Text ?? string.Empty;
-                    movieTimeDuration = driver.FindElement(By.XPath(XpathStrings.MovieTimeDurationXpath))?.Text ?? string.Empty;
-                    movieIMDBVoterCount = driver.FindElement(By.XPath(XpathStrings.MovieIMDBVoterCountXpath))?.Text ?? string.Empty;
-                    movieDescription = driver.FindElement(By.XPath(XpathStrings.MovieDescriptionXpath))?.Text ?? string.Empty;
-                    moviePosterImageUrl = driver.FindElement(By.XPath(XpathStrings.MoviePosterImageUrlXpath))?.GetAttribute("src") ?? string.Empty;
-                    movieWatchOnPrimeLink = driver.FindElement(By.XPath(XpathStrings.MovieWatchOnPrimeLink))?.GetAttribute("href") ?? string.Empty;
-                    var movieGenres = driver.FindElements(By.XPath(XpathStrings.MovieGenresXpath))?.ToList();
-                    var movieWriters = driver.FindElements(By.XPath(XpathStrings.MovieWritersXpath))?.ToList();
-                    var movieStars = driver.FindElements(By.XPath(XpathStrings.MovieStarsXpath))?.ToList();
-                    var movieDirectors = driver.FindElements(By.XPath(XpathStrings.MovieDirectorXpath))?.ToList();
+                    try { movieReleaseYear = driver.FindElement(By.XPath(XpathStrings.MovieReleaseYearXpath)).Text; }
+                    catch (Exception) { movieReleaseYear = string.Empty; }
 
+                    try { movieTimeDuration = driver.FindElement(By.XPath(XpathStrings.MovieTimeDurationXpath))?.Text; }
+                    catch (Exception) { movieTimeDuration = string.Empty; }
+
+                    try { movieIMDBVoterCount = driver.FindElement(By.XPath(XpathStrings.MovieIMDBVoterCountXpath))?.Text; }
+                    catch (Exception) { movieIMDBVoterCount = string.Empty; }
+
+                    try { movieDescription = driver.FindElement(By.XPath(XpathStrings.MovieDescriptionXpath))?.Text; }
+                    catch (Exception) { movieDescription = string.Empty; }
+
+                    try { moviePosterImageUrl = driver.FindElement(By.XPath(XpathStrings.MoviePosterImageUrlXpath))?.GetAttribute("src"); }
+                    catch (Exception) { moviePosterImageUrl = string.Empty; }
+
+                    try { movieWatchOnPrimeLink = driver.FindElement(By.XPath(XpathStrings.MovieWatchOnPrimeLink))?.GetAttribute("href"); }
+                    catch (Exception) { movieWatchOnPrimeLink = string.Empty; }
+
+                    var movieGenres = driver.FindElements(By.XPath(XpathStrings.MovieGenresXpath));
+                    var movieWriters = driver.FindElements(By.XPath(XpathStrings.MovieWritersXpath));
+                    var movieStars = driver.FindElements(By.XPath(XpathStrings.MovieStarsXpath));
+                    var movieDirectors = driver.FindElements(By.XPath(XpathStrings.MovieDirectorXpath));
 
                     if (movieDirectors != null)
                         foreach (var director in movieDirectors)
@@ -191,14 +203,14 @@ namespace IMDB_Crawling
                         movieRecord.Id = movieRecord.Id;
                         movieRecord.MovieId = movieId;
                         movieRecord.ReleaseYear = movieReleaseYear;
-                        movieRecord.TimeDuration = movieTimeDuration;
-                        movieRecord.PosterImageUrl = moviePosterImageUrl;
+                        movieRecord.TimeDuration = movieTimeDuration!;
+                        movieRecord.PosterImageUrl = moviePosterImageUrl!;
                         movieRecord.Genres = movieGenresString;
-                        movieRecord.Description = movieDescription;
+                        movieRecord.Description = movieDescription!;
                         movieRecord.Director = movieDirectorsString;
                         movieRecord.Writer = movieWritersString;
                         movieRecord.Stars = movieStarsString;
-                        movieRecord.WatchOnPrimeLink = movieWatchOnPrimeLink;
+                        movieRecord.WatchOnPrimeLink = movieWatchOnPrimeLink!;
                         _context.tbl_Movie_Details.Update(movieRecord);
                     }
                     else
@@ -207,15 +219,15 @@ namespace IMDB_Crawling
                         {
                             MovieId = movieId,
                             ReleaseYear = movieReleaseYear,
-                            TimeDuration = movieTimeDuration,
-                            IMDBVoterCount = movieIMDBVoterCount,
-                            PosterImageUrl = moviePosterImageUrl,
+                            TimeDuration = movieTimeDuration!,
+                            IMDBVoterCount = movieIMDBVoterCount!,
+                            PosterImageUrl = moviePosterImageUrl!,
                             Genres = movieGenresString,
-                            Description = movieDescription,
+                            Description = movieDescription!,
                             Director = movieDirectorsString,
                             Writer = movieWritersString,
                             Stars = movieStarsString,
-                            WatchOnPrimeLink = movieWatchOnPrimeLink
+                            WatchOnPrimeLink = movieWatchOnPrimeLink!
                         };
                         await _context.tbl_Movie_Details.AddAsync(movieDetails);
                     }

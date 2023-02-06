@@ -20,9 +20,9 @@ namespace Phillips_Crawling_Task.Service
         public static readonly string MoviePosterImageUrlXpath = "//div[@class='ipc-media ipc-media--poster-27x40 ipc-image-media-ratio--poster-27x40 ipc-media--baseAlt ipc-media--poster-l ipc-poster__poster-image ipc-media__img']/img";
         public static readonly string MovieGenresXpath = "//a[@class='sc-b5a9e5a3-3 cDXGWB ipc-chip ipc-chip--on-baseAlt']/span";
         public static readonly string MovieDescriptionXpath = "//span[@class='sc-b5a9e5a3-2 jTXFcx']";
-        public static readonly string MovieDirectorXpath = "(//button[contains(text(),'Director')]/following-sibling::div/ul)[1]/li";
-        public static readonly string MovieWritersXpath = "(//button[contains(text(),'Writer')]/following-sibling::div/ul)[1]/li";
-        public static readonly string MovieStarsXpath = "(//a[contains(text(),'Star')]/following-sibling::div/ul)[1]/li";
+        public static readonly string MovieDirectorXpath = "(//*[contains(text(),'Director')]/following-sibling::div/ul)[1]/li";
+        public static readonly string MovieWritersXpath = "(//*[contains(text(),'Writer')]/following-sibling::div/ul)[1]/li";
+        public static readonly string MovieStarsXpath = "(//*[contains(text(),'Star')]/following-sibling::div/ul)[1]/li";
         public static readonly string MovieWatchOnPrimeLink = "//a[@class='ipc-btn ipc-btn--full-width ipc-btn--center-align-content ipc-btn--large-height ipc-btn--core-accent1 ipc-btn--theme-baseAlt sc-3b14d2c8-0 bmaqfn']";
     }
 }
