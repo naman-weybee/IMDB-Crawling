@@ -13,6 +13,7 @@ namespace IMDB_Crawling
     {
         private static readonly IMDBContext _context = new();
         private const string Url = "https://www.imdb.com/";
+        private const string BaseUrl = "https://www.imdb.com";
         static void Main(string[] args)
         {
             GetIMDBDetails();
@@ -84,9 +85,9 @@ namespace IMDB_Crawling
             {
                 foreach (var movie in AllMovies)
                 {
-                    var movieUrl = "https://www.imdb.com/" + movie.SelectSingleNode(XpathStrings.SingleMovieLinkXpath).GetAttributes("href").First().Value;
+                    var movieUrl = BaseUrl + movie.SelectSingleNode(XpathStrings.SingleMovieLinkXpath).GetAttributes("href").First().Value;
                     var movieTitle = movie.SelectNodes(XpathStrings.MovieTitleXpath).First().InnerHtml.Trim() ?? string.Empty;
-                    var movieLink = movie.SelectNodes(XpathStrings.MovieLinkXpath).First().GetAttributes("href").First().Value ?? string.Empty;
+                    var movieLink = BaseUrl + movie.SelectNodes(XpathStrings.MovieLinkXpath).First().GetAttributes("href").First().Value ?? string.Empty;
                     var movieIMDB = movie.SelectNodes(XpathStrings.MovieIMDBXpath).First().InnerHtml.Trim() ?? string.Empty;
                     var movieId = RegexString.movieIdRegex.Match(movieLink).Groups[1].Value;
                     var movieRank = AllMovies.IndexOf(movie) + 1;
