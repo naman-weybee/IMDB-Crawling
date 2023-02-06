@@ -91,6 +91,7 @@ namespace IMDB_Crawling
                     var movieId = RegexString.movieIdRegex.Match(movieLink).Groups[1].Value;
                     var movieRank = AllMovies.IndexOf(movie) + 1;
 
+                    Console.WriteLine($"----------Movie with Id = {movieId}----------");
                     Console.WriteLine($"Movie Rank in IMDB: {movieRank}");
                     Console.WriteLine($"Movie Id: {movieId}");
                     Console.WriteLine($"Movie Title: {movieTitle}");
@@ -186,6 +187,7 @@ namespace IMDB_Crawling
                             else
                                 movieStarsString += star.Text;
 
+                    Console.WriteLine($"----------Movie Details of Movie Id = {movieId}----------");
                     Console.WriteLine($"Movie Id: {movieId}");
                     Console.WriteLine($"Release Year: {movieReleaseYear}");
                     Console.WriteLine($"Time Duration: {movieTimeDuration}");
@@ -196,6 +198,7 @@ namespace IMDB_Crawling
                     Console.WriteLine($"Writer: {movieWritersString}");
                     Console.WriteLine($"Stars: {movieStarsString}");
                     Console.WriteLine($"Watch On Prime Link: {movieWatchOnPrimeLink}");
+                    Console.WriteLine();
 
                     var movieRecord = await _context.tbl_Movie_Details.Where(x => x.MovieId == movieId).FirstOrDefaultAsync();
                     if (movieRecord != null)
@@ -238,6 +241,7 @@ namespace IMDB_Crawling
                     Console.WriteLine("=====================================================================================================================");
                     Console.WriteLine();
                 }
+                driver.Close();
                 Console.WriteLine("Data Saved Successfully...!");
             }
             catch (Exception ex)
