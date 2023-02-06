@@ -18,7 +18,7 @@ namespace IMDB_Crawling
             Console.ReadLine();
         }
 
-        public static void GetFullyLoadedWebPageContent(WebDriver driver)
+        public static void GetFullyLoadedWebPage(WebDriver driver)
         {
             long scrollHeight = 0;
             IJavaScriptExecutor js = driver;
@@ -38,7 +38,7 @@ namespace IMDB_Crawling
             } while (true);
         }
 
-        public static string GetFullyLoadedPageContent(WebDriver driver)
+        public static string GetFullyLoadedWebPageContent(WebDriver driver)
         {
             long scrollHeight = 0;
             IJavaScriptExecutor js = driver;
@@ -74,7 +74,7 @@ namespace IMDB_Crawling
             Thread.Sleep(500);
 
             driver.FindElement(By.XPath(XpathStrings.Top250MoviesXpath)).Click();
-            var pageSiurce = GetFullyLoadedPageContent(driver);
+            var pageSiurce = GetFullyLoadedWebPageContent(driver);
             var Details = new HtmlDocument();
             Details.LoadHtml(pageSiurce);
             var AllMovies = Details.DocumentNode.SelectNodes(XpathStrings.MovieListXpath);
@@ -121,7 +121,7 @@ namespace IMDB_Crawling
                     }
 
                     driver.Navigate().GoToUrl(movieUrl);
-                    GetFullyLoadedWebPageContent(driver);
+                    GetFullyLoadedWebPage(driver);
 
                     var movieReleaseYear = string.Empty;
                     var movieGenresString = string.Empty;

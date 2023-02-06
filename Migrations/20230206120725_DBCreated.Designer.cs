@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMDB_Crawling.Migrations
 {
     [DbContext(typeof(IMDBContext))]
-    [Migration("20230206080926_DBCreated")]
+    [Migration("20230206120725_DBCreated")]
     partial class DBCreated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
