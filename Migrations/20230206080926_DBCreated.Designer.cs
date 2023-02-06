@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMDB_Crawling.Migrations
 {
     [DbContext(typeof(IMDBContext))]
-    [Migration("20230206075738_DBCreated")]
+    [Migration("20230206080926_DBCreated")]
     partial class DBCreated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,9 @@ namespace IMDB_Crawling.Migrations
                     b.Property<string>("Link")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MovieRankInIMDB")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
